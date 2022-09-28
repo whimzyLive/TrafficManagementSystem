@@ -2,20 +2,51 @@ using TrafficLights;
 
 public class TrafficSignal
 {
-  public ITrafficLight? Light { get; set; } // No traffic light instance simulates light off scenario 
+  public ITrafficLight? CurrentLight { get; set; }
+  public ITrafficLight? TargetLight { get; set; }
+  public TimeSpan SignalTime { get; }
 
-  public void TurnOn(ITrafficLight light)
+  public TrafficSignal(TimeSpan signalTime)
   {
-    Light = light;
+    SignalTime = signalTime;
   }
 
-  public void ChangeLight()
+  public async Task Go()
   {
-    if (Light == null)
-    {
-      Console.WriteLine("Light is off, start the light first...");
-    }
+    TargetLight = new GreenLight();
+    await ChangeLights();
 
-    Light!.Next(this);
+    Console.WriteLine("**** Go ****");
+  }
+
+  public async Task Stop()
+  {
+    TargetLight = new RedLight();
+    await ChangeLights();
+
+    Console.WriteLine("**** Stop ****");
+  }
+
+  public void ReportLight(string message)
+  {
+    Console.WriteLine(message);
+  }
+
+  public void TurnOn()
+  {
+    CurrentLight = new RedLight();
+    Console.WriteLine("*Signal is On*");
+    CurrentLight.Report(this);
+  }
+
+  private async Task ChangeLights()
+  {
+    await CurrentLight!.Next(this);
+    CurrentLight!.Report(this);
+
+    if (CurrentLight!.Type != TargetLight!.Type)
+    {
+      await ChangeLights();
+    }
   }
 }

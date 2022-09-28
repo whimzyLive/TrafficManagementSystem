@@ -1,8 +1,5 @@
-﻿using TrafficLights;
+﻿var signal = new TrafficSignal(TimeSpan.FromSeconds(5));
 
-var signal = new TrafficSignal();
-
-signal.TurnOn(new RedLight());
-
-signal.ChangeLight();
-signal.ChangeLight();
+signal.TurnOn();
+await signal.Go();
+await signal.Stop();

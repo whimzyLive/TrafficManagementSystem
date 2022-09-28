@@ -2,12 +2,17 @@ namespace TrafficLights;
 
 public class YellowLight : ITrafficLight
 {
-  public YellowLight()
+  public TrafficLightType Type { get; } = TrafficLightType.YellowLight;
+
+  public async Task Next(TrafficSignal signal)
   {
-    Console.WriteLine("Yellow Light...🟡");
+    await Task.Delay((int)TimeSpan.FromSeconds(2).TotalMilliseconds);
+
+    signal.CurrentLight = new RedLight();
   }
-  public void Next(TrafficSignal signal)
+
+  public void Report(TrafficSignal Signal)
   {
-    signal.Light = new RedLight();
+    Signal.ReportLight($"Yellow Light...🟡");
   }
 }
