@@ -4,11 +4,11 @@ public class TrafficSignal
 {
   public ITrafficLight? CurrentLight { get; set; }
   public ITrafficLight? TargetLight { get; set; }
-  public TimeSpan SignalTime { get; }
+  public bool Auto { get; set; }
 
-  public TrafficSignal(TimeSpan signalTime)
+  public TrafficSignal(bool auto)
   {
-    SignalTime = signalTime;
+    Auto = auto;
   }
 
   public async Task Go()
@@ -27,6 +27,22 @@ public class TrafficSignal
     Console.WriteLine("**** Stop ****");
   }
 
+  public async Task AutoShuffle()
+  {
+    await Go();
+
+    await Task.Delay((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
+
+    await Stop();
+
+    await Task.Delay((int)TimeSpan.FromSeconds(5).TotalMilliseconds);
+
+    if (Auto)
+    {
+      await AutoShuffle();
+    }
+  }
+
   public void ReportLight(string message)
   {
     Console.WriteLine(message);
@@ -36,7 +52,6 @@ public class TrafficSignal
   {
     CurrentLight = new RedLight();
     Console.WriteLine("*Signal is On*");
-    CurrentLight.Report(this);
   }
 
   private async Task ChangeLights()

@@ -6,7 +6,7 @@ public class RedLight : ITrafficLight
 
   public async Task Next(TrafficSignal signal)
   {
-    await Task.Delay((int)signal.SignalTime.TotalMilliseconds);
+    await Task.CompletedTask;
 
     signal.CurrentLight = new GreenLight();
   }

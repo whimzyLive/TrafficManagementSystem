@@ -1,5 +1,5 @@
-﻿var signal = new TrafficSignal(TimeSpan.FromSeconds(5));
+﻿var signal = new TrafficSignal(auto: true);
 
 signal.TurnOn();
-await signal.Go();
-await signal.Stop();
+
+await signal.AutoShuffle();
