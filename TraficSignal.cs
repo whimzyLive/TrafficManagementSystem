@@ -1,67 +1,34 @@
 using TrafficLights;
 
-public class TrafficSignal
+public class VehicleSignal : BaseTrafficSignal
 {
-  public ITrafficLight? CurrentLight { get; set; }
-  public ITrafficLight? TargetLight { get; set; }
-  public bool Auto { get; set; }
-
-  public TrafficSignal(bool auto)
+  public TrafficController TrafficController { get; set; }
+  public VehicleSignal(
+    TrafficController controller,
+    string identifier,
+    ITrafficLight light) : base(identifier, light)
   {
-    Auto = auto;
+    TrafficController = controller;
   }
 
-  public async Task Go()
+  public override async Task Go(TimeSpan? openFor)
   {
     TargetLight = new GreenLight();
     await ChangeLights();
 
-    Console.WriteLine("**** Go ****");
+    Console.WriteLine($"===> {Identifier} vehicles Go");
+    if (openFor.HasValue)
+    {
+      await Task.Delay((int)openFor.Value.TotalMilliseconds);
+      await Stop();
+    }
   }
 
-  public async Task Stop()
+  public override async Task Stop()
   {
     TargetLight = new RedLight();
     await ChangeLights();
 
-    Console.WriteLine("**** Stop ****");
-  }
-
-  public async Task AutoShuffle()
-  {
-    await Go();
-
-    await Task.Delay((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
-
-    await Stop();
-
-    await Task.Delay((int)TimeSpan.FromSeconds(5).TotalMilliseconds);
-
-    if (Auto)
-    {
-      await AutoShuffle();
-    }
-  }
-
-  public void ReportLight(string message)
-  {
-    Console.WriteLine(message);
-  }
-
-  public void TurnOn()
-  {
-    CurrentLight = new RedLight();
-    Console.WriteLine("*Signal is On*");
-  }
-
-  private async Task ChangeLights()
-  {
-    await CurrentLight!.Next(this);
-    CurrentLight!.Report(this);
-
-    if (CurrentLight!.Type != TargetLight!.Type)
-    {
-      await ChangeLights();
-    }
+    Console.WriteLine($"===> {Identifier} vehicles Stop");
   }
 }

@@ -1,5 +1,3 @@
-﻿var signal = new TrafficSignal(auto: true);
+﻿var controller = new TrafficController();
 
-signal.TurnOn();
-
-await signal.AutoShuffle();
+await controller.Run();
