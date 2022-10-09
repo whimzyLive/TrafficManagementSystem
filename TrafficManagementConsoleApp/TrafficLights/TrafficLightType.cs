@@ -1,8 +1,8 @@
-namespace TrafficLights;
+namespace TrafficManagementConsoleApp.TrafficLights;
 
 public enum TrafficLightType
 {
-  RedLight = 1,
-  GreenLight = 2,
-  YellowLight = 2,
+    RedLight = 1,
+    GreenLight = 2,
+    YellowLight = 2,
 }

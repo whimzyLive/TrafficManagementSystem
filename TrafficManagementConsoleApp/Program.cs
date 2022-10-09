@@ -1,3 +1,5 @@
-﻿var controller = new TrafficController();
+﻿using TrafficManagementConsoleApp;
+
+var controller = new TrafficController();
 
 await controller.Run();
