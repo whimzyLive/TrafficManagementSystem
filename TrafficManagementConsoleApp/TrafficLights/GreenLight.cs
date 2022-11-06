@@ -2,17 +2,16 @@ namespace TrafficManagementConsoleApp.TrafficLights;
 
 public class GreenLight : ITrafficLight
 {
-    public TrafficLightType Type { get; } = TrafficLightType.GreenLight;
+    public TrafficSignal TrafficSignal { get; set; }
 
-    public Task Next(ITrafficSignal signal)
+    public GreenLight(TrafficSignal signal)
     {
-        signal.CurrentLight = new YellowLight();
-
-        return Task.CompletedTask;
+        TrafficSignal = signal;
     }
 
-    public void Report(ITrafficSignal signal)
+    public void ChangeLight()
     {
-        signal.ReportLight("Green Light...🟢");
+        Console.WriteLine("Changing Light Green => Yellow...");
+        TrafficSignal.CurrentLight = TrafficSignal.YellowLight;
     }
 }
